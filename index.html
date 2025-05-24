@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商务饭局模拟器</title>
+    <title>饭局模拟器</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
+        <!-- 开始界面 -->
+        <div class="start-screen" id="start-screen">
+            <div class="start-overlay"></div>
+            <div class="start-content">
+                <h1 class="game-title">饭局模拟器</h1>
+                <p class="game-story">公司资金链断裂，员工工资已拖欠三个月。今晚这场饭局，是你们最后的机会——成功合作，起死回生；失败离场，江湖再见。</p>
+                <button class="start-game-btn" id="start-game-btn">开始游戏</button>
+            </div>
+        </div>
+        
         <!-- 背景图片容器 -->
         <div class="background-wrapper">
             <img class="man-img" id="img-man1" src="./images/img_man1.png" alt="人物1">
@@ -28,7 +38,8 @@
         <div class="dialog-area">
             <div class="opponent-response" id="opponent-dialog"></div>
             <div class="our-topic" id="our-dialog"></div>
-            
+            <!-- 点击提示 -->
+            <div class="click-hint" id="click-hint">点击屏幕继续</div>
         </div>
         
         <!-- 我方发言区域（和角色选择区域互斥显示） -->
@@ -48,16 +59,22 @@
                 商务<br>总监
             </button>
         </div>
-
+        
         <!-- 发言人标签 -->
-        <div class="speaker-label" id="speaker-label">选择发言人</div>
-        <!-- 点击提示 -->
-        <div class="click-hint" id="click-hint">点击屏幕继续</div>        
+        <div class="speaker-label" id="speaker-label">该由谁来发起话题？</div>
+        
+        <!-- 结算界面遮罩 -->
+        <div class="game-over-overlay" id="game-over-overlay"></div>
+        
         <!-- 游戏结束提示 -->
         <div class="game-over" id="game-over">
-            <h2 id="game-result"></h2>
-            <p id="game-message"></p>
-            <button class="restart-btn" onclick="restartGame()">重新开始</button>
+            <div class="result-icon" id="result-icon">🎉</div>
+            <h2 class="result-title" id="game-result"></h2>
+            <p class="result-message" id="game-message"></p>
+            <div class="motivational-quote" id="motivational-quote">
+                <p class="quote-text" id="quote-text">成功的商务谈判不在于一次决定，而在于每一个细节的积累。</p>
+            </div>
+            <button class="restart-btn" onclick="restartGame()">再次挑战</button>
         </div>
     </div>
 

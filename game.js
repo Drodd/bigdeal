@@ -1,13 +1,29 @@
 // 游戏状态
 let gameState = {
     confidence: 20,  // 信心值
-    relationship: 20, // 关系值
+    relationship: 35, // 关系值
     gameEnded: false,
     isProcessing: false,
     // 添加等级跟踪
     confidenceLevel: 'low',
     relationshipLevel: 'low'
 };
+
+// 商业鸡汤语录库
+const motivationalQuotes = [
+    "成功的商务谈判不在于一次决定，而在于每一个细节的积累。",
+    "每一次失败都是通往成功路上的垫脚石，坚持下去就是胜利。",
+    "商场如战场，但真正的智者懂得在合作中寻找共赢。",
+    "沟通是商务合作的桥梁，耐心是通往成功的钥匙。",
+    "在商务谈判中，倾听往往比说话更加重要。",
+    "成功不是偶然，而是在正确的时间做出正确的选择。",
+    "每一个'不'的背后，都隐藏着一个更好的'是'。",
+    "真正的成功来自于对细节的把控和对时机的洞察。",
+    "商务合作如同艺术，需要的是平衡、节奏与创造力。",
+    "机会总是留给那些有准备、懂沟通、会坚持的人。",
+    "失败只是暂时的，但放弃就是永久的。继续前进吧！",
+    "每一次谈判都是一次学习，每一次挫折都是一次成长。"
+];
 
 // 技术总监话题库
 const techTopics = [
@@ -18,20 +34,56 @@ const techTopics = [
     "我们的技术团队都是清华北大的博士，在各自领域都有深厚的技术积累。",
     "我们的产品在性能测试中表现优异，响应时间控制在毫秒级别。",
     "我们建立了完善的DevOps体系，代码部署效率提升了10倍。",
-    "我们的数据安全方案通过了国际最高级别的认证。"
+    "我们的数据安全方案通过了国际最高级别的认证。",
+    "我们的分布式数据库采用最新的分片技术，查询性能提升了50倍。",
+    "我们自研的容器编排平台已经在生产环境稳定运行两年多。",
+    "我们的机器学习模型采用了深度神经网络，预测精度行业领先。",
+    "我们实现了零停机时间的热更新，服务可用性达到99.99%。",
+    "我们的区块链技术方案已经为多家银行提供了可信数据服务。",
+    "我们建立了完整的监控告警体系，能够预测并避免99%的系统故障。",
+    "我们的边缘计算框架大幅降低了网络延迟，用户体验提升显著。",
+    "我们采用了最新的量子加密算法，确保数据传输的绝对安全。",
+    "我们的智能调度算法能够自动优化资源配置，成本节省了30%。",
+    "我们搭建了业界最先进的大数据处理平台，支持PB级数据实时分析。",
+    "我们的API网关采用了自适应限流技术，有效防止了各种攻击。",
+    "我们开发的低代码平台让业务人员也能快速搭建应用系统。"
 ];
 
-// 商务总监话题库
-const businessTopics = [
-    "来，我敬您一杯，感谢您今天抽出宝贵时间和我们交流。",
-    "这酒真是不错，听说是茅台的特供版，平时很难买到呢。",
-    "您的公司在行业内声誉卓著，我们早就仰慕已久了。",
-    "来来来，大家一起干一杯，为今天的相遇干杯！",
-    "您今天气色真好，一看就是事业有成的成功人士。",
-    "这个菜是这家餐厅的招牌，您尝尝看，特别有特色。",
-    "您对红酒有研究吗？这瓶是法国波尔多的珍藏版。",
-    "难得有机会和您这样的行业专家交流，真是受益匪浅。"
-];
+// 商务总监话题库（按类型分组）
+const businessTopics = {
+    toast: [
+        "来，我敬您一杯，感谢您今天抽出宝贵时间和我们交流。",
+        "来来来，大家一起干一杯，为今天的相遇干杯！",
+        "来，我们为双方的友谊干杯，希望今后多多合作！"
+    ],
+    wine: [
+        "这酒真是不错，听说是茅台的特供版，平时很难买到呢。",
+        "您对红酒有研究吗？这瓶是法国波尔多的珍藏版。",
+        "这瓶酒是我珍藏多年的，今天特意拿出来和您分享。"
+    ],
+    compliment: [
+        "您的公司在行业内声誉卓著，我们早就仰慕已久了。",
+        "您今天气色真好，一看就是事业有成的成功人士。",
+        "您这身西装真是不错，一看就是定制的，很有品味。",
+        "您真是年轻有为啊，这么年轻就有如此成就，令人佩服。",
+        "您的眼光真是独到，一眼就看出了市场的关键点。"
+    ],
+    food: [
+        "这个菜是这家餐厅的招牌，您尝尝看，特别有特色。",
+        "这道海鲜是从澳洲空运来的，新鲜得很，您一定要尝尝。"
+    ],
+    environment: [
+        "这家餐厅的环境真优雅，我特意选的这个包间，希望您满意。",
+        "这次能请到您来，我们全公司都感到非常荣幸！"
+    ],
+    relationship: [
+        "难得有机会和您这样的行业专家交流，真是受益匪浅。",
+        "听说您最近的项目进展得很顺利，真是恭喜恭喜啊！",
+        "我听朋友说您的高尔夫球技很棒，改天我们一起切磋切磋。",
+        "能和您这样的企业家交朋友，真是我的荣幸啊！",
+        "您对市场的分析真是精准，我们应该向您多学习。"
+    ]
+};
 
 // 总经理话题库
 const managerTopics = [
@@ -71,30 +123,138 @@ const responses = {
         ]
     },
     business: {
-        low: [
-            "谢谢，您客气了。",
-            "好的，谢谢。",
-            "嗯，这酒确实不错。",
-            "您太客气了。"
-        ],
-        medium: [
-            "您太客气了，我们也就是普通企业而已。",
-            "哪里哪里，我们还有很多不足的地方。",
-            "过奖了，我们还在学习阶段。",
-            "谢谢夸奖，我们会继续努力的。"
-        ],
-        high: [
-            "谢谢您的认可，能认识您这样的朋友真是太好了！",
-            "您说得太好了，我们确实应该多交流合作！",
-            "和您聊天真是愉快，希望我们能成为长期的合作伙伴！",
-            "您的话让我很受用，我们的合作一定会很愉快！"
-        ],
-        veryHigh: [
-            "哈哈，您真是太有意思了！我们一见如故啊！",
-            "和您这样的朋友合作，我一百个放心！来，我们再干一杯！",
-            "您真是我见过最有魅力的企业家！我们一定要深度合作！",
-            "今天认识您真是我的荣幸！我们马上就可以开始合作！"
-        ]
+        toast: {
+            low: [
+                "谢谢，我也敬您一杯。",
+                "好的，谢谢您的盛情。",
+                "客气了，干杯。"
+            ],
+            medium: [
+                "您太客气了，我们共同举杯！",
+                "感谢您的安排，这次交流很有意义。",
+                "能有机会和您交流，我也很高兴！"
+            ],
+            high: [
+                "太好了！和您这样的朋友喝酒真是愉快！",
+                "您的热情让我很感动，来，我们干杯！",
+                "能认识您这样的朋友，真是我的荣幸！干杯！"
+            ],
+            veryHigh: [
+                "哈哈，您真是太有意思了！来，我们不醉不归！",
+                "和您喝酒真是太开心了！我们是真正的朋友！",
+                "您的豪爽我很欣赏！今天一定要尽兴！"
+            ]
+        },
+        wine: {
+            low: [
+                "嗯，这酒确实不错。",
+                "好酒，谢谢您的介绍。",
+                "确实是好酒，品质很高。"
+            ],
+            medium: [
+                "您真是有心了，这酒我很喜欢。",
+                "看得出您对酒很有研究，受教了。",
+                "您的收藏确实不错，很有品味。"
+            ],
+            high: [
+                "您的品味真是太好了！这酒我很少喝到！",
+                "能品尝到您的珍藏，真是太感谢了！",
+                "您真是太用心了，这么好的酒都拿出来分享！"
+            ],
+            veryHigh: [
+                "天哪！这酒太棒了！您真是太有心了！",
+                "您的收藏让我大开眼界！我们以后要经常交流！",
+                "这种级别的酒您都愿意分享，我们真是知音啊！"
+            ]
+        },
+        compliment: {
+            low: [
+                "您过奖了。",
+                "哪里哪里，谢谢夸奖。",
+                "您太客气了。"
+            ],
+            medium: [
+                "谢谢您的认可，我们还在努力。",
+                "您的夸奖让我很受用，谢谢。",
+                "过奖了，我们还有很多要学习的。"
+            ],
+            high: [
+                "谢谢您的赞美！您的眼光真是独到！",
+                "能得到您这样专家的认可，我很高兴！",
+                "您的话让我很受鼓舞，谢谢！"
+            ],
+            veryHigh: [
+                "您真是太会说话了！我们一见如故啊！",
+                "哈哈，您的赞美让我都不好意思了！",
+                "您真是我见过最有眼光的企业家！"
+            ]
+        },
+        food: {
+            low: [
+                "好的，我尝尝看。",
+                "谢谢推荐。",
+                "确实看起来不错。"
+            ],
+            medium: [
+                "您真是太用心了，这菜确实很特别。",
+                "看得出您经常来这里，很有经验。",
+                "您的推荐很不错，味道确实很好。"
+            ],
+            high: [
+                "太好吃了！您的推荐真是太棒了！",
+                "这菜确实是招牌，您真是内行！",
+                "能在这里品尝到这么好的菜，谢谢您的安排！"
+            ],
+            veryHigh: [
+                "这简直是人间美味！您真是太会享受生活了！",
+                "您的品味让我佩服！以后吃饭一定要请教您！",
+                "和您一起用餐真是享受！您真是美食专家！"
+            ]
+        },
+        environment: {
+            low: [
+                "环境确实不错。",
+                "谢谢您的安排。",
+                "这里很好。"
+            ],
+            medium: [
+                "您选择的地方真不错，很有品味。",
+                "这个包间确实很优雅，谢谢您的用心。",
+                "能在这样的环境中交流，确实很愉快。"
+            ],
+            high: [
+                "您真是太用心了！这个地方选得太好了！",
+                "这种级别的安排，看得出您的诚意！",
+                "在这样的环境中谈合作，真是太棒了！"
+            ],
+            veryHigh: [
+                "您的安排让我感动！这真是顶级的享受！",
+                "和您这样有品味的朋友合作，我完全放心！",
+                "您的诚意我完全感受到了！这次合作一定成功！"
+            ]
+        },
+        relationship: {
+            low: [
+                "谢谢您的关心。",
+                "您太客气了。",
+                "哪里哪里。"
+            ],
+            medium: [
+                "谢谢您的关注，确实进展不错。",
+                "您消息真灵通，谢谢关心。",
+                "能得到您的关注，我很高兴。"
+            ],
+            high: [
+                "谢谢您的关心！希望我们能多交流！",
+                "您真是有心人！我们确实应该多合作！",
+                "能认识您这样的朋友，真是太好了！"
+            ],
+            veryHigh: [
+                "您真是我的知音啊！我们一定要深入合作！",
+                "和您这样的朋友在一起，什么都好商量！",
+                "您真是太了解我了！我们马上就可以开始合作！"
+            ]
+        }
     },
     manager: {
         accept: [
@@ -115,27 +275,27 @@ const responses = {
 // 等级提示文本
 const levelHints = {
     confidence: {
-        low: "对方面无表情，似乎对技术能力存疑",
-        medium: "对方微微坐正了身子",
-        high: "对方眼中闪过一丝赞许的光芒",
-        veryHigh: "对方明显被技术实力所折服"
+        low: "对方漫不经心地转动着茶杯",
+        medium: "对方放下了手机，略微前倾身子",
+        high: "对方停下了筷子，聚精会神地注视着你",
+        veryHigh: "对方双眼发亮，不由自主地点头称赞"
     },
     relationship: {
         low: {
-            up: "对方开始收起冷漠，稍微放松了戒备",
-            down: "气氛变得尴尬，对方明显保持着距离"
+            up: "双方的对话开始有了些许默契",
+            down: "双方的交流变得磕磕绊绊"
         },
         medium: {
-            up: "对方开始放松下来，话语中多了些亲近",
-            down: "对方重新变得客套，之前的亲近感在消退"
+            up: "双方开始频繁地碰杯，气氛渐趋融洽",
+            down: "双方的举杯变得客套，桌上多了静默"
         },
         high: {
-            up: "对方脸上浮现出真诚的笑容",
-            down: "对方的笑容变得勉强，热情在减退"
+            up: "双方谈笑风生，酒菜都成了次要",
+            down: "双方的笑声渐少，重新专注于用餐"
         },
         veryHigh: {
-            up: "对方完全放下戒备，如老友般畅谈",
-            down: "对方收敛了过度的热情，重新审视起来"
+            up: "双方相视而笑，仿佛多年老友重逢",
+            down: "双方保持着微笑，但话题变得谨慎"
         }
     }
 };
@@ -203,13 +363,13 @@ function checkGameFailure() {
         console.log('💀 游戏失败！信心或关系降至0！');
         let reason = '';
         if (gameState.confidence <= 0 && gameState.relationship <= 0) {
-            reason = '信心和关系都降至0，对方彻底失去兴趣...';
+            reason = '谈判氛围急转直下，对方决定终止会谈...';
         } else if (gameState.confidence <= 0) {
-            reason = '对方对您的技术实力失去信心...';
+            reason = '对方对提议缺乏信心，选择了更保守的合作伙伴...';
         } else {
-            reason = '双方关系恶化，对方不愿继续交流...';
+            reason = '双方沟通出现分歧，商务合作暂时搁浅...';
         }
-        showGameEnd(false, "合作失败！", reason);
+        showGameEnd(false, "合作暂未达成", reason);
         return true;
     }
     return false;
@@ -219,23 +379,44 @@ function checkGameFailure() {
 function initGame() {
     gameState = {
         confidence: 20,
-        relationship: 20,
+        relationship: 35,
         gameEnded: false,
         isProcessing: false,
         confidenceLevel: getLevel(20),
-        relationshipLevel: getLevel(20)
+        relationshipLevel: getLevel(35)
     };
     updateDisplay();
     document.getElementById('game-over').style.display = 'none';
     document.getElementById('level-hint').style.display = 'none';
-    document.getElementById('speaker-label').textContent = '选择发言人';
+    document.getElementById('speaker-label').textContent = '该由谁来发起话题？';
     hideDialogs();
+    
+    // 显示开始界面
+    showStartScreen();
     
     // 控制台输出初始状态
     console.log('=== 游戏初始化 ===');
     console.log(`信心: ${gameState.confidence}% (${gameState.confidenceLevel})`);
     console.log(`关系: ${gameState.relationship}% (${gameState.relationshipLevel})`);
     console.log('==================');
+}
+
+// 显示开始界面
+function showStartScreen() {
+    const startScreen = document.getElementById('start-screen');
+    startScreen.classList.remove('hidden');
+    startScreen.style.display = 'flex';
+}
+
+// 隐藏开始界面，开始游戏
+function hideStartScreen() {
+    const startScreen = document.getElementById('start-screen');
+    startScreen.classList.add('hidden');
+    
+    // 1秒后完全隐藏元素
+    setTimeout(() => {
+        startScreen.style.display = 'none';
+    }, 1000);
 }
 
 // 更新显示
@@ -327,10 +508,13 @@ async function selectRole(role) {
     
     // 获取我方话题
     let ourTopic;
+    let businessTopicType; // 商务话题类型
     if (role === 'tech') {
         ourTopic = techTopics[Math.floor(Math.random() * techTopics.length)];
     } else if (role === 'business') {
-        ourTopic = businessTopics[Math.floor(Math.random() * businessTopics.length)];
+        businessTopicType = Object.keys(businessTopics)[Math.floor(Math.random() * Object.keys(businessTopics).length)];
+        const topicIndex = Math.floor(Math.random() * businessTopics[businessTopicType].length);
+        ourTopic = businessTopics[businessTopicType][topicIndex];
     } else if (role === 'manager') {
         ourTopic = managerTopics[Math.floor(Math.random() * managerTopics.length)];
     }
@@ -346,6 +530,8 @@ async function selectRole(role) {
         gameState.relationship = Math.max(0, gameState.relationship - Math.floor(Math.random() * 5) - 5);
     } else if (role === 'business') {
         gameState.relationship = Math.min(100, gameState.relationship + Math.floor(Math.random() * 5) + 10);
+    } else {
+        console.log('总经理发言不直接影响数值');
     }
     
     // 输出数值变化
@@ -384,7 +570,7 @@ async function selectRole(role) {
             console.log('👆 点击屏幕继续...');
             await waitForClick();
             
-            showGameEnd(true, "合作成功！", "对方欣然接受了您的合作提议！");
+            showGameEnd(true, "合作达成！", "经过精彩的商务谈判，双方达成了重要的战略合作协议！");
             return;
         } else {
             opponentResponse = responses.manager.reject[Math.floor(Math.random() * responses.manager.reject.length)];
@@ -412,7 +598,11 @@ async function selectRole(role) {
         
         console.log(`对方基于${targetName}值(${targetValue}%)的回复等级: ${level}`);
         
-        opponentResponse = responses[role][level][Math.floor(Math.random() * responses[role][level].length)];
+        if (role === 'business') {
+            opponentResponse = responses[role][businessTopicType][level][Math.floor(Math.random() * responses[role][businessTopicType][level].length)];
+        } else {
+            opponentResponse = responses[role][level][Math.floor(Math.random() * responses[role][level].length)];
+        }
     }
     
     console.log(`对方回复: ${opponentResponse}`);
@@ -443,21 +633,63 @@ async function selectRole(role) {
     // 等级提示完全消失后，重新显示角色选择区域
     document.getElementById('our-speech-area').style.display = 'none';
     document.getElementById('role-selection').style.display = 'flex';
-    document.getElementById('speaker-label').textContent = '选择发言人';
+    document.getElementById('speaker-label').textContent = '该由谁来发起话题？';
     gameState.isProcessing = false;
 }
 
 // 显示游戏结束
 function showGameEnd(success, title, message) {
     gameState.gameEnded = true;
-    document.getElementById('game-result').textContent = title;
-    document.getElementById('game-result').style.color = success ? '#28a745' : '#dc3545';
-    document.getElementById('game-message').textContent = message;
-    document.getElementById('game-over').style.display = 'block';
+    
+    // 获取DOM元素
+    const gameOverElement = document.getElementById('game-over');
+    const gameOverOverlay = document.getElementById('game-over-overlay');
+    const resultIcon = document.getElementById('result-icon');
+    const resultTitle = document.getElementById('game-result');
+    const resultMessage = document.getElementById('game-message');
+    const quoteText = document.getElementById('quote-text');
+    
+    // 根据成功/失败设置不同的图标和样式
+    if (success) {
+        resultIcon.textContent = '🎉';
+        gameOverElement.className = 'game-over success';
+        resultTitle.textContent = title;
+    } else {
+        resultIcon.textContent = '💼';
+        gameOverElement.className = 'game-over failure';
+        resultTitle.textContent = title;
+    }
+    
+    // 设置消息内容
+    resultMessage.textContent = message;
+    
+    // 随机选择一条鸡汤语录
+    const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+    quoteText.textContent = randomQuote;
+    
+    // 显示遮罩层和结算界面
+    gameOverOverlay.style.display = 'block';
+    gameOverElement.style.display = 'block';
+    
+    // 控制台输出（保留调试信息）
+    if (success) {
+        console.log('🎉 游戏成功！');
+    } else {
+        console.log('💼 游戏结束');
+    }
 }
 
 // 重新开始游戏
 function restartGame() {
+    // 隐藏游戏结束界面和遮罩层，并清除样式类
+    const gameOverElement = document.getElementById('game-over');
+    const gameOverOverlay = document.getElementById('game-over-overlay');
+    
+    gameOverElement.style.display = 'none';
+    gameOverOverlay.style.display = 'none';
+    gameOverElement.className = 'game-over'; // 重置为默认类名
+    
+    // 重新初始化游戏（包括显示开始界面）
     initGame();
 }
 
@@ -469,6 +701,13 @@ function sleep(ms) {
 // 初始化游戏
 document.addEventListener('DOMContentLoaded', function() {
     initGame();
+    
+    // 绑定开始游戏按钮事件
+    const startGameBtn = document.getElementById('start-game-btn');
+    startGameBtn.addEventListener('click', function() {
+        hideStartScreen();
+        console.log('🚀 游戏开始！');
+    });
 });
 
 // 调试功能（按F12显示隐藏数值）

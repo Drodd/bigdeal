@@ -2,6 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none; /* 防止文字和图片被选中 */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
 }
 
 body {
@@ -10,6 +14,137 @@ body {
     overflow: hidden;
     height: 100vh;
     position: relative;
+}
+
+/* 开始界面样式 */
+.start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease-out;
+}
+
+.start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.start-content {
+    position: relative;
+    z-index: 101;
+    text-align: center;
+    color: white;
+    max-width: 600px;
+    padding: 40px 20px;
+    animation: startContentFadeIn 1.5s ease-out;
+}
+
+.game-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+    animation: titleSlideDown 1s ease-out;
+    color: #FFFFFF;
+}
+
+.game-story {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: storyFadeIn 1s ease-out 0.5s forwards;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #f0f0f0;
+}
+
+.start-game-btn {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #333;
+    border: none;
+    padding: 18px 40px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: buttonFadeIn 1s ease-out 1s forwards;
+    letter-spacing: 2px;
+}
+
+.start-game-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+    background: linear-gradient(45deg, #FFA500, #FFD700);
+}
+
+.start-game-btn:active {
+    transform: translateY(-1px);
+}
+
+/* 隐藏开始界面 */
+.start-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 开始界面动画 */
+@keyframes startContentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes titleSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes storyFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .game-container {
@@ -49,6 +184,11 @@ body {
 .man-img {
     position: absolute;
     pointer-events: none; /* 不阻挡点击事件 */
+    -webkit-user-drag: none; /* 防止拖拽 */
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
 }
 
 /* img_man1 样式 - 原始尺寸 358x677 */
@@ -144,7 +284,7 @@ body {
 
 .click-hint {
     position: absolute;
-    top: 15%;
+    top: 50%;
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -228,33 +368,172 @@ body {
     z-index: 10;
 }
 
+/* 结算界面毛玻璃遮罩 */
+.game-over-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 19;
+    display: none;
+    animation: overlayFadeIn 0.5s ease-out;
+    pointer-events: none; /* 不阻挡点击事件 */
+}
+
+/* 游戏结束界面 */
 .game-over {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 50px 40px;
+    border-radius: 25px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     z-index: 20;
     display: none;
+    max-width: 500px;
+    width: 90%;
+    animation: gameOverFadeIn 0.8s ease-out;
+    border: 3px solid rgba(255, 215, 0, 0.3);
 }
 
+/* 结果图标 */
+.result-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: iconBounce 1s ease-out;
+}
+
+/* 结果标题 */
+.result-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 结果消息 */
+.result-message {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* 鸡汤语录容器 */
+.motivational-quote {
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    border-left: 4px solid #FFD700;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.motivational-quote::before {
+    content: '"';
+    position: absolute;
+    top: -5px;
+    left: 15px;
+    font-size: 3rem;
+    color: #FFD700;
+    font-family: Georgia, serif;
+    opacity: 0.7;
+}
+
+.quote-text {
+    font-size: 1rem;
+    color: #495057;
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* 重新开始按钮 */
 .restart-btn {
-    background: #007bff;
+    background: linear-gradient(45deg, #007bff, #0056b3);
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
+    padding: 15px 35px;
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 14px;
-    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    letter-spacing: 1px;
 }
 
 .restart-btn:hover {
-    background: #0056b3;
+    background: linear-gradient(45deg, #0056b3, #007bff);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.restart-btn:active {
+    transform: translateY(0);
+}
+
+/* 游戏结束界面动画 */
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gameOverFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes iconBounce {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-15px);
+    }
+    80% {
+        transform: translateY(-5px);
+    }
+}
+
+/* 成功和失败的特殊样式 */
+.game-over.success {
+    border-color: rgba(40, 167, 69, 0.3);
+    background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
+}
+
+.game-over.failure {
+    border-color: rgba(220, 53, 69, 0.3);
+    background: linear-gradient(135deg, #fff8f8 0%, #f5e8e8 100%);
+}
+
+.game-over.success .result-title {
+    color: #28a745;
+}
+
+.game-over.failure .result-title {
+    color: #dc3545;
 }
 
 @keyframes slideDown {
@@ -359,6 +638,67 @@ body {
 }
 
 @media (max-width: 768px) {
+    .game-title {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+    }
+    
+    .game-story {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        padding: 0 10px;
+    }
+    
+    .start-game-btn {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+    
+    .start-content {
+        padding: 30px 15px;
+        max-width: 90%;
+    }
+    
+    /* 游戏结束界面移动端样式 */
+    .game-over {
+        padding: 35px 25px;
+        width: 95%;
+        max-width: none;
+    }
+    
+    .result-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .result-title {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+    
+    .result-message {
+        font-size: 1rem;
+        margin-bottom: 25px;
+    }
+    
+    .motivational-quote {
+        padding: 15px;
+        margin: 20px 0;
+    }
+    
+    .quote-text {
+        font-size: 0.9rem;
+    }
+    
+    .restart-btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+        margin-top: 20px;
+    }
+    
     .role-btn {
         width: 70px;
         height: 70px;
@@ -376,7 +716,7 @@ body {
     }
     
     .level-hint {
-        top: 25%;
+        top: 30%;
         font-size: 14px;
         padding: 6px 12px;
         max-width: 95vw;
@@ -389,7 +729,7 @@ body {
     }
     
     .click-hint {
-        top: 34%;
+        top: 75%;
         font-size: 12px;
     }
     
@@ -404,6 +744,6 @@ body {
     }
     
     .speaker-label {
-        bottom: 150px;
+        bottom: 160px;
     }
 } 
