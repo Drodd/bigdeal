@@ -526,7 +526,7 @@ async function selectRole(role) {
     const oldRelationship = gameState.relationship;
     
     if (role === 'tech') {
-        gameState.confidence = Math.min(100, gameState.confidence + Math.floor(Math.random() * 5) + 5);
+        gameState.confidence = Math.min(100, gameState.confidence + Math.floor(Math.random() * 7) + 7);
         gameState.relationship = Math.max(0, gameState.relationship - Math.floor(Math.random() * 5) - 5);
     } else if (role === 'business') {
         gameState.relationship = Math.min(100, gameState.relationship + Math.floor(Math.random() * 5) + 10);
