@@ -1,0 +1,409 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    background-color: #C4915C;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+}
+
+.game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('./images/img_bg.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 背景图片包装容器 */
+.background-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 背景图片的原始比例 1149:1532 */
+    width: calc(100vh * 1149 / 1532);
+    height: 100vh;
+    max-width: 100vw;
+    max-height: calc(100vw * 1532 / 1149);
+    /* 当容器受到max-width限制时，调整高度 */
+    z-index: 1; /* 在背景图片之上 */
+}
+
+/* 适应不同屏幕比例 */
+@media (max-aspect-ratio: 1149/1532) {
+    .background-wrapper {
+        width: 100vw;
+        height: calc(100vw * 1532 / 1149);
+    }
+}
+
+/* 人物图片基础样式 */
+.man-img {
+    position: absolute;
+    pointer-events: none; /* 不阻挡点击事件 */
+}
+
+/* img_man1 样式 - 原始尺寸 358x677 */
+#img-man1 {
+    width: calc(358 / 1149 * 100%); /* 相对于背景图片的宽度比例 */
+    height: auto; /* 保持原始比例 */
+    left: 5%; /* 左侧位置 */
+    bottom: 20%; /* 稍微抬高位置 */
+    z-index: 2;
+}
+
+/* img_man2 样式 - 原始尺寸 327x757 */
+#img-man2 {
+    width: calc(327 / 1149 * 100%); /* 相对于背景图片的宽度比例 */
+    height: auto; /* 保持原始比例 */
+    left: 50%; /* 中间位置 */
+    bottom: 13%; /* 底部位置 */
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+/* img_man3 样式 - 原始尺寸 359x696 */
+#img-man3 {
+    width: calc(359 / 1149 * 100%); /* 相对于背景图片的宽度比例 */
+    height: auto; /* 保持原始比例 */
+    right: 5%; /* 右侧位置 */
+    bottom: 19%; /* 稍微抬高位置 */
+    z-index: 4;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 5; /* 在人物图片之上 */
+}
+
+.level-hint {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 15;
+    display: none;
+    animation: hintFadeIn 0.5s ease-out;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    max-width: 90vw;
+}
+
+.dialog-area {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 10;
+}
+
+.opponent-response {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    animation: slideDown 0.5s ease-out;
+}
+
+.our-topic {
+    background: #f0f0f0;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    animation: slideUp 0.5s ease-out;
+}
+
+.click-hint {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 14px;
+    opacity: 0.8;
+    display: none;
+    animation: pulse 2s infinite;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.role-selection {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 10;
+}
+
+/* 我方发言区域 - 和角色选择区域同位置，互斥显示 */
+.our-speech-area {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 10;
+    display: none;
+}
+
+.our-speech {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.5s ease-out;
+    margin-bottom: 20px;
+}
+
+.role-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+}
+
+.role-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.role-btn:active {
+    transform: scale(0.95);
+}
+
+.speaker-label {
+    position: absolute;
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 20;
+    display: none;
+}
+
+.restart-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.restart-btn:hover {
+    background: #0056b3;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hintFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* 说话动画 - 上下起伏效果 */
+@keyframes speaking {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-4px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-3px);
+    }
+}
+
+/* 为人物图片添加说话动画类 */
+.man-img.speaking {
+    animation: speaking 1s ease-in-out;
+}
+
+/* img_man2 说话时需要保持居中变换 */
+#img-man2.speaking {
+    animation: speaking 1s ease-in-out;
+}
+
+/* 需要为img_man2单独定义说话动画，保持translateX(-50%) */
+@keyframes speaking-centered {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    25% {
+        transform: translateX(-50%) translateY(-4px);
+    }
+    50% {
+        transform: translateX(-50%) translateY(0);
+    }
+    75% {
+        transform: translateX(-50%) translateY(-3px);
+    }
+}
+
+#img-man2.speaking {
+    animation: speaking-centered 1s ease-in-out;
+}
+
+.hidden-stats {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    z-index: 10;
+    display: none; /* 隐藏数值，仅用于调试 */
+}
+
+@media (max-width: 768px) {
+    .role-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 11px;
+    }
+    
+    .role-selection {
+        gap: 15px;
+        bottom: 80px;
+    }
+    
+    .dialog-area {
+        width: 95%;
+        top: 25%;
+    }
+    
+    .level-hint {
+        top: 25%;
+        font-size: 14px;
+        padding: 6px 12px;
+        max-width: 95vw;
+    }
+    
+    .opponent-response,
+    .our-topic {
+        padding: 15px;
+        font-size: 14px;
+    }
+    
+    .click-hint {
+        top: 34%;
+        font-size: 12px;
+    }
+    
+    .our-speech-area {
+        bottom: 80px;
+        width: 95%;
+    }
+    
+    .our-speech {
+        padding: 15px;
+        font-size: 14px;
+    }
+    
+    .speaker-label {
+        bottom: 150px;
+    }
+} 

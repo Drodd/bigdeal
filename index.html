@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商务饭局模拟器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- 背景图片容器 -->
+        <div class="background-wrapper">
+            <img class="man-img" id="img-man1" src="./images/img_man1.png" alt="人物1">
+            <img class="man-img" id="img-man2" src="./images/img_man2.png" alt="人物2">
+            <img class="man-img" id="img-man3" src="./images/img_man3.png" alt="人物3">
+        </div>
+        
+        <!-- 隐藏的数值显示（调试用） -->
+        <div class="hidden-stats" id="stats">
+            信心: <span id="confidence-value">20</span>%
+            关系: <span id="relationship-value">20</span>%
+        </div>
+        
+        <!-- 等级变化提示区域 -->
+        <div class="level-hint" id="level-hint"></div>
+        
+        <!-- 对话区域 -->
+        <div class="dialog-area">
+            <div class="opponent-response" id="opponent-dialog"></div>
+            <div class="our-topic" id="our-dialog"></div>
+            
+        </div>
+        
+        <!-- 我方发言区域（和角色选择区域互斥显示） -->
+        <div class="our-speech-area" id="our-speech-area">
+            <div class="our-speech" id="our-speech"></div>
+        </div>
+        
+        <!-- 角色选择 -->
+        <div class="role-selection" id="role-selection">
+            <button class="role-btn" onclick="selectRole('tech')" id="tech-btn">
+                技术<br>总监
+            </button>
+            <button class="role-btn" onclick="selectRole('manager')" id="manager-btn">
+                总经理
+            </button>
+            <button class="role-btn" onclick="selectRole('business')" id="business-btn">
+                商务<br>总监
+            </button>
+        </div>
+
+        <!-- 发言人标签 -->
+        <div class="speaker-label" id="speaker-label">选择发言人</div>
+        <!-- 点击提示 -->
+        <div class="click-hint" id="click-hint">点击屏幕继续</div>        
+        <!-- 游戏结束提示 -->
+        <div class="game-over" id="game-over">
+            <h2 id="game-result"></h2>
+            <p id="game-message"></p>
+            <button class="restart-btn" onclick="restartGame()">重新开始</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html> 
